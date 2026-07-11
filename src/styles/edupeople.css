@@ -1,0 +1,120 @@
+.people-panel {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #dce3ee;
+}
+
+.section-heading,
+.people-toolbar,
+.form-actions,
+.person-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.section-heading {
+  justify-content: space-between;
+}
+
+.section-heading h2 {
+  margin: 0;
+}
+
+.people-toolbar {
+  margin: 1.5rem 0;
+}
+
+.people-toolbar input,
+.people-toolbar select,
+.person-form input,
+.person-form select {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font: inherit;
+}
+
+.person-form {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border: 1px solid #dce3ee;
+  border-radius: 16px;
+  background: #f8fafc;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.form-grid label {
+  display: grid;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+.people-summary {
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.people-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.person-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #dce3ee;
+  border-radius: 16px;
+  background: #f8fafc;
+}
+
+.person-details {
+  flex: 1;
+}
+
+.person-details p,
+.person-details small {
+  display: block;
+  margin: 0.25rem 0 0;
+}
+
+.person-avatar {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #172033;
+  color: #fff;
+  font-weight: 700;
+}
+
+.secondary-button {
+  background: #e2e8f0;
+}
+
+.danger-button {
+  background: #fee2e2;
+}
+
+@media (max-width: 640px) {
+  .section-heading,
+  .people-toolbar,
+  .person-card,
+  .person-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}

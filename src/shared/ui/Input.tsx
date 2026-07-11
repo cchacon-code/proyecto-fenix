@@ -14,7 +14,7 @@ export function Input({
   className = '',
   ...props
 }: InputProps) {
-  const inputId = id ?? props.name ?? label.toLowerCase().replaceAll(' ', '-');
+  const inputId = id ?? props.name ?? label.toLowerCase().replace(/ /g, '-');
 
   return (
     <label className="ui-field" htmlFor={inputId}>

@@ -19,7 +19,7 @@ export function Select({
   className = '',
   ...props
 }: SelectProps) {
-  const selectId = id ?? props.name ?? label.toLowerCase().replaceAll(' ', '-');
+  const selectId = id ?? props.name ?? label.toLowerCase().replace(/ /g, '-');
 
   return (
     <label className="ui-field" htmlFor={selectId}>

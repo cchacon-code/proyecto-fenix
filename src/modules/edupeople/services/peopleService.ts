@@ -1,4 +1,5 @@
 import type { Person, PersonType } from '../domain/person';
+import { storage } from '../../../shared/storage';
 
 const STORAGE_KEY = 'fenix.edupeople';
 
@@ -6,17 +7,16 @@ export class PeopleService {
   private people: Person[] = [];
 
   constructor() {
-    this.people = this.load();
+    this.people = storage.get<Person[]>(STORAGE_KEY) ?? [];
   }
 
   getAll(): Person[] {
     return [...this.people];
   }
+
   getById(personId: string): Person | null {
-  return (
-    this.people.find((person) => person.id === personId) ?? null
-  );
-}
+    return this.people.find((person) => person.id === personId) ?? null;
+  }
 
   add(person: Person): void {
     if (this.people.some((item) => item.id === person.id)) {
@@ -51,31 +51,27 @@ export class PeopleService {
 
     return this.people.filter((person) => {
       const matchesType = type === 'all' || person.type === type;
-      const fullText = `${person.firstName} ${person.lastName} ${person.email ?? ''}`.toLowerCase();
+      const fullText =
+        `${person.firstName} ${person.lastName} ${person.email ?? ''}`.toLowerCase();
+
       return matchesType && fullText.includes(normalized);
     });
   }
 
   seed(initialPeople: Person[]): void {
-    if (this.people.length > 0) return;
+    if (this.people.length > 0) {
+      return;
+    }
+
     this.people = [...initialPeople];
     this.persist();
   }
 
-  private persist(): void {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.people));
+  count(): number {
+    return this.people.length;
   }
 
-  private load(): Person[] {
-    const data = localStorage.getItem(STORAGE_KEY);
-
-    if (!data) return [];
-
-    try {
-      return JSON.parse(data) as Person[];
-    } catch {
-      localStorage.removeItem(STORAGE_KEY);
-      return [];
-    }
+  private persist(): void {
+    storage.set(STORAGE_KEY, this.people);
   }
 }

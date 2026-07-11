@@ -1,9 +1,10 @@
 import type { Course } from '../domain/course';
+import { storage } from '../../../shared/storage';
 
 const STORAGE_KEY = 'fenix.educourses';
 
 export class CourseService {
-  private courses: Course[] = this.load();
+  private courses: Course[] = storage.get<Course[]>(STORAGE_KEY) ?? [];
 
   getAll(): Course[] {
     return [...this.courses];
@@ -38,25 +39,11 @@ export class CourseService {
     this.persist();
   }
 
-  private persist(): void {
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(this.courses),
-    );
+  count(): number {
+    return this.courses.length;
   }
 
-  private load(): Course[] {
-    const data = localStorage.getItem(STORAGE_KEY);
-
-    if (!data) {
-      return [];
-    }
-
-    try {
-      return JSON.parse(data) as Course[];
-    } catch {
-      localStorage.removeItem(STORAGE_KEY);
-      return [];
-    }
+  private persist(): void {
+    storage.set(STORAGE_KEY, this.courses);
   }
 }

@@ -6,6 +6,7 @@ const navigation = [
   { to: '/cursos', label: 'Cursos', icon: '🎓' },
   { to: '/organizacion', label: 'Organización', icon: '🏫' },
   { to: '/design-system', label: 'Design System', icon: '◈' },
+  { to: '/datos', label: 'Datos', icon: '▦' },
 ];
 
 export function Sidebar() {

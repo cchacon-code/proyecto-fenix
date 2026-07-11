@@ -6,6 +6,7 @@ import { DesignSystemPage } from './pages/DesignSystemPage';
 import { HomePage } from './pages/HomePage';
 import { OrganizationPage } from './pages/OrganizationPage';
 import { PeoplePage } from './pages/PeoplePage';
+import { StoragePage } from './pages/StoragePage';
 
 export function App() {
   return (
@@ -18,6 +19,7 @@ export function App() {
           <Route path="/cursos" element={<CoursesPage />} />
           <Route path="/organizacion" element={<OrganizationPage />} />
           <Route path="/design-system" element={<DesignSystemPage />} />
+          <Route path="/datos" element={<StoragePage />} />
         </Route>
       </Routes>
     </BrowserRouter>

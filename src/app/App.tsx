@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
+import { ErrorBoundary, FeedbackProvider } from '../shared/feedback';
 import { AppLayout } from './layout/AppLayout';
 import { CoursesPage } from './pages/CoursesPage';
 import { DesignSystemPage } from './pages/DesignSystemPage';
@@ -10,18 +11,22 @@ import { StoragePage } from './pages/StoragePage';
 
 export function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<AppLayout />}>
-          <Route index element={<Navigate to="/inicio" replace />} />
-          <Route path="/inicio" element={<HomePage />} />
-          <Route path="/personas" element={<PeoplePage />} />
-          <Route path="/cursos" element={<CoursesPage />} />
-          <Route path="/organizacion" element={<OrganizationPage />} />
-          <Route path="/design-system" element={<DesignSystemPage />} />
-          <Route path="/datos" element={<StoragePage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <FeedbackProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<AppLayout />}>
+              <Route index element={<Navigate to="/inicio" replace />} />
+              <Route path="/inicio" element={<HomePage />} />
+              <Route path="/personas" element={<PeoplePage />} />
+              <Route path="/cursos" element={<CoursesPage />} />
+              <Route path="/organizacion" element={<OrganizationPage />} />
+              <Route path="/design-system" element={<DesignSystemPage />} />
+              <Route path="/datos" element={<StoragePage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </FeedbackProvider>
+    </ErrorBoundary>
   );
 }

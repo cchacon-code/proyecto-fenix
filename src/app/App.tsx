@@ -1,76 +1,22 @@
-import { useState } from 'react';
-
-import { EduCore } from '../core/educore';
-import type { UserIdentity } from '../core/identity/identity';
-import type { Organization } from '../core/organization/organization';
-
-import { Dashboard } from './Dashboard';
-
-const usuarioEjemplo: UserIdentity = {
-  uid: 'usr-carlos-001',
-  name: 'Carlos Chacón',
-  email: 'cchacon@colegioeducenter.cl',
-
-  organization: {
-    id: 'org-educenter',
-    name: 'Colegio Particular Educenter',
-  },
-
-  role: {
-    id: 'admin',
-    name: 'Administrador',
-  },
-
-  permissions: [
-    'planning.view',
-    'planning.create',
-    'planning.edit',
-    'planning.approve',
-    'dashboard.view',
-    'admin.manage',
-  ],
-};
-
-const organizacionEjemplo: Organization = {
-  id: 'org-educenter',
-  name: 'Colegio Particular Educenter',
-  rut: '76.000.000-0',
-  country: 'Chile',
-  region: 'Valparaíso',
-  commune: 'Calle Larga',
-  active: true,
-};
-
-EduCore.organization.setOrganization(organizacionEjemplo);
-
-const savedUser = EduCore.session.load();
-
-if (savedUser) {
-  EduCore.identity.setCurrentUser(savedUser);
-}
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { AppLayout } from './layout/AppLayout';
+import { CoursesPage } from './pages/CoursesPage';
+import { HomePage } from './pages/HomePage';
+import { OrganizationPage } from './pages/OrganizationPage';
+import { PeoplePage } from './pages/PeoplePage';
 
 export function App() {
-  const [currentUser, setCurrentUser] = useState(
-    EduCore.identity.getCurrentUser(),
-  );
-
-  function startSession(): void {
-    EduCore.identity.setCurrentUser(usuarioEjemplo);
-    EduCore.session.save(usuarioEjemplo);
-    setCurrentUser(usuarioEjemplo);
-  }
-
-  function closeSession(): void {
-    EduCore.identity.clear();
-    EduCore.session.clear();
-    setCurrentUser(null);
-  }
-
   return (
-    <Dashboard
-      currentUser={currentUser}
-      onStartSession={startSession}
-      onCloseSession={closeSession}
-    />
+    <BrowserRouter>
+      <Routes>
+        <Route element={<AppLayout />}>
+          <Route index element={<Navigate to="/inicio" replace />} />
+          <Route path="/inicio" element={<HomePage />} />
+          <Route path="/personas" element={<PeoplePage />} />
+          <Route path="/cursos" element={<CoursesPage />} />
+          <Route path="/organizacion" element={<OrganizationPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }

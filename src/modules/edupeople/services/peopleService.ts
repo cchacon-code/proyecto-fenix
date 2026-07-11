@@ -12,6 +12,11 @@ export class PeopleService {
   getAll(): Person[] {
     return [...this.people];
   }
+  getById(personId: string): Person | null {
+  return (
+    this.people.find((person) => person.id === personId) ?? null
+  );
+}
 
   add(person: Person): void {
     if (this.people.some((item) => item.id === person.id)) {

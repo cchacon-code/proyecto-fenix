@@ -4,6 +4,7 @@ import { KernelStatus } from './KernelStatus';
 import { SessionPanel } from './SessionPanel';
 import { PeoplePanel } from '../modules/edupeople/components/PeoplePanel';
 import { OrganizationProfilePanel } from '../modules/eduorganization/index';
+import { CoursesPanel } from '../modules/educourses/components/CoursesPanel';
 
 interface DashboardProps {
   currentUser: UserIdentity | null;
@@ -35,6 +36,7 @@ export function Dashboard({
 
 <PeoplePanel />
 <OrganizationProfilePanel />
+<CoursesPanel />
 
       </section>
     </main>

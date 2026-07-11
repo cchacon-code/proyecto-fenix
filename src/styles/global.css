@@ -110,3 +110,42 @@ button {
 .organization-profile-form button {
   margin-top: 1.5rem;
 }
+.courses-panel {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #dce3ee;
+}
+
+.course-form {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border: 1px solid #dce3ee;
+  border-radius: 16px;
+  background: #f8fafc;
+}
+
+.courses-list {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.course-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #dce3ee;
+  border-radius: 16px;
+  background: #f8fafc;
+}
+
+.course-card p {
+  margin: 0.35rem 0 0;
+}
+
+@media (max-width: 640px) {
+  .course-card {
+    flex-direction: column;
+  }
+}

@@ -11,6 +11,7 @@ import {
   LayoutDashboard,
   Palette,
   Settings,
+  Waypoints,
   Users,
 } from 'lucide-react';
 import { useAuth } from '../../auth/AuthProvider';
@@ -52,6 +53,7 @@ const groups: NavigationGroup[] = [
       { to: '/datos', label: 'Datos', icon: Database, enabled: true, permission: 'data.view' },
       { to: '/design-system', label: 'Design System', icon: Palette, enabled: true, permission: 'design.view' },
       { to: '/configuracion', label: 'Configuración', icon: Settings, enabled: true, permission: 'settings.view' },
+      { to: '/foundation', label: 'Foundation 0.5', icon: Waypoints, enabled: true, permission: 'settings.view' },
     ],
   },
 ];
@@ -146,7 +148,7 @@ export function Sidebar() {
         <span className="system-dot" />
         <div>
           <strong>EduCore operativo</strong>
-          <small>Platform 0.4 · {user?.role.name}</small>
+          <small>Foundation 0.5 · {user?.role.name}</small>
         </div>
       </footer>
     </aside>

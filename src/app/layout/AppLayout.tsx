@@ -11,6 +11,7 @@ const titles: Record<string, string> = {
   '/datos': 'Capa de datos',
   '/design-system': 'Design System',
   '/configuracion': 'Configuración',
+  '/foundation': 'Foundation 0.5',
 };
 
 function initials(name: string): string {

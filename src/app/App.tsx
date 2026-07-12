@@ -8,6 +8,7 @@ import { ProtectedRoute } from './routing/ProtectedRoute';
 import { AccessDeniedPage } from './pages/AccessDeniedPage';
 import { CoursesPage } from './pages/CoursesPage';
 import { DesignSystemPage } from './pages/DesignSystemPage';
+import { FoundationPage } from './pages/FoundationPage';
 import { HomePage } from './pages/HomePage';
 import { LoginPage } from './pages/LoginPage';
 import { OrganizationPage } from './pages/OrganizationPage';
@@ -52,6 +53,7 @@ export function App() {
 
                   <Route element={<PermissionRoute permission="settings.view" />}>
                     <Route path="/configuracion" element={<SettingsPage />} />
+                    <Route path="/foundation" element={<FoundationPage />} />
                   </Route>
                 </Route>
               </Route>

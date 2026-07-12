@@ -10,3 +10,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><
 import './styles/fusion.css';
 
 import './styles/platform-v04.css';
+
+import './styles/foundation-v05.css';

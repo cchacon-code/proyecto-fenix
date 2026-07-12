@@ -26,7 +26,7 @@ export function HomePage() {
     <div className="dashboard-page">
       <section className="welcome-panel">
         <div>
-          <Badge variant="info">Platform 0.4</Badge>
+          <Badge variant="info">Foundation 0.5</Badge>
           <h1>Buenos días, {user?.name.split(' ')[0]}.</h1>
           <p>
             Este workspace adapta la navegación y las acciones a tu rol de {user?.role.name.toLowerCase()}.
@@ -98,18 +98,18 @@ export function HomePage() {
             <div><span><i className="status-dot active" />Sesión</span><Badge variant="success">Protegida</Badge></div>
             <div><span><i className="status-dot active" />Rol</span><Badge variant="info">{user?.role.name}</Badge></div>
             <div><span><i className="status-dot active" />Institución</span><Badge variant="success">Activa</Badge></div>
-            <div><span><i className="status-dot pending" />Firebase Auth</span><Badge variant="warning">Adaptador siguiente</Badge></div>
+            <div><span><i className="status-dot pending" />Foundation</span><Badge variant="success">Contratos listos</Badge></div>
           </div>
         </Card>
       </section>
 
       <section className="vision-banner">
         <div>
-          <span>ARQUITECTURA DE AUTENTICACIÓN</span>
-          <h2>La interfaz ya no depende de una identidad fija</h2>
-          <p>AuthGateway permite sustituir el acceso local por Firebase Authentication sin reescribir las rutas ni el workspace.</p>
+          <span>FOUNDATION 0.5</span>
+          <h2>La arquitectura ya está preparada para Firebase y EduPlanning</h2>
+          <p>Contratos de repositorio, eventos, auditoría y feature flags protegen el crecimiento del producto sin acoplar los módulos.</p>
         </div>
-        <span className="vision-number">0.4</span>
+        <span className="vision-number">0.5</span>
       </section>
     </div>
   );

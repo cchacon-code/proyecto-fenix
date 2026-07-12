@@ -6,3 +6,7 @@ import './styles/edupeople.css';
 import './styles/layout.css';
 import './styles/design-system.css';
 ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);
+
+import './styles/fusion.css';
+
+import './styles/platform-v04.css';

@@ -8,7 +8,7 @@ import {
 import type { ReactNode } from 'react';
 
 import type { UserIdentity } from '../core/identity/identity';
-import { LocalAuthGateway } from './services/LocalAuthGateway';
+import { FirebaseAuthGateway } from './services/FirebaseAuthGateway';
 import type { AuthCredentials, AuthGateway } from './auth.types';
 
 interface AuthContextValue {
@@ -16,20 +16,23 @@ interface AuthContextValue {
   isLoading: boolean;
   signIn(credentials: AuthCredentials): Promise<void>;
   signOut(): Promise<void>;
+  resetPassword(email: string): Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
-const gateway: AuthGateway = new LocalAuthGateway();
+const gateway: AuthGateway = new FirebaseAuthGateway();
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserIdentity | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    gateway
-      .restoreSession()
-      .then(setUser)
-      .finally(() => setIsLoading(false));
+    const unsubscribe = gateway.subscribe((nextUser) => {
+      setUser(nextUser);
+      setIsLoading(false);
+    });
+
+    return unsubscribe;
   }, []);
 
   const value = useMemo<AuthContextValue>(
@@ -44,11 +47,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await gateway.signOut();
         setUser(null);
       },
+      async resetPassword(email) {
+        await gateway.resetPassword(email);
+      },
     }),
     [user, isLoading],
   );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth(): AuthContextValue {

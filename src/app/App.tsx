@@ -15,6 +15,7 @@ import { OrganizationPage } from './pages/OrganizationPage';
 import { PeoplePage } from './pages/PeoplePage';
 import { SettingsPage } from './pages/SettingsPage';
 import { StoragePage } from './pages/StoragePage';
+import { CloudStatusPage } from './pages/CloudStatusPage';
 
 export function App() {
   return (
@@ -59,6 +60,7 @@ export function App() {
               </Route>
 
               <Route path="*" element={<Navigate to="/inicio" replace />} />
+              <Route path="/cloud" element={<CloudStatusPage />} />
             </Routes>
           </BrowserRouter>
         </AuthProvider>

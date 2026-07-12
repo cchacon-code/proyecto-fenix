@@ -6,6 +6,7 @@ import {
   Building2,
   ChevronDown,
   ChevronRight,
+  Cloud,
   Database,
   GraduationCap,
   LayoutDashboard,
@@ -13,7 +14,7 @@ import {
   Settings,
   Waypoints,
   Users,
-} from 'lucide-react';
+} from "lucide-react";
 import { useAuth } from '../../auth/AuthProvider';
 import { canAccess } from '../../auth/permissions';
 
@@ -38,6 +39,13 @@ const groups: NavigationGroup[] = [
       { to: '/personas', label: 'EduPeople', icon: Users, enabled: true, permission: 'people.view' },
       { to: '/cursos', label: 'EduCourses', icon: GraduationCap, enabled: true, permission: 'courses.view' },
       { to: '/organizacion', label: 'EduOrganization', icon: Building2, enabled: true, permission: 'organization.view' },
+      {
+  to: '/cloud',
+  label: 'EduCloud',
+  icon: Cloud,
+  enabled: true,
+  permission: 'dashboard.view'
+},
     ],
   },
   {

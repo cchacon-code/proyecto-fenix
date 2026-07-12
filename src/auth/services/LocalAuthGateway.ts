@@ -70,6 +70,15 @@ export class LocalAuthGateway implements AuthGateway {
     return { user };
   }
 
+  async resetPassword(): Promise<void> {
+    throw new Error('La recuperación de contraseña no está disponible en el modo local.');
+  }
+
+  subscribe(callback: (user: UserIdentity | null) => void): () => void {
+    void this.restoreSession().then(callback);
+    return () => undefined;
+  }
+
   async signOut(): Promise<void> {
     EduCore.identity.clear();
     EduCore.session.clear();

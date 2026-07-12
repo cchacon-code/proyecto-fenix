@@ -1,0 +1,74 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function currentUserPath() {
+      return /databases/$(database)/documents/users/$(request.auth.uid);
+    }
+
+    function currentUserExists() {
+      return signedIn() && exists(currentUserPath());
+    }
+
+    function currentUser() {
+      return get(currentUserPath()).data;
+    }
+
+    function belongsTo(orgId) {
+      return currentUserExists()
+        && currentUser().active == true
+        && currentUser().organizationId == orgId;
+    }
+
+    function isManager() {
+      return currentUserExists()
+        && currentUser().role in [
+          'superadmin',
+          'admin',
+          'director',
+          'coordinator'
+        ];
+    }
+
+    match /users/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+
+      // Permite que una cuenta autenticada cree únicamente su propio perfil.
+      allow create: if signedIn()
+        && request.auth.uid == uid
+        && request.resource.data.uid == uid
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.active == true;
+
+      allow update: if signedIn()
+        && request.auth.uid == uid
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.organizationId == resource.data.organizationId
+        && request.resource.data.role == resource.data.role;
+
+      allow delete: if false;
+    }
+
+    match /organizations/{orgId} {
+      // Bootstrap seguro: el primer administrador crea una organización
+      // indicando su propio UID como creador.
+      allow create: if signedIn()
+        && request.resource.data.id == orgId
+        && request.resource.data.creatorUid == request.auth.uid
+        && request.resource.data.active == true;
+
+      allow read: if belongsTo(orgId);
+      allow update: if belongsTo(orgId) && isManager();
+      allow delete: if false;
+
+      match /{subCollection}/{documentId} {
+        allow read: if belongsTo(orgId);
+        allow write: if belongsTo(orgId) && isManager();
+      }
+    }
+  }
+}

@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function userDoc() { return get(/databases/$(database)/documents/users/$(request.auth.uid)); }
+    function belongsTo(orgId) { return signedIn() && userDoc().data.active == true && userDoc().data.organizationId == orgId; }
+    function isManager() { return userDoc().data.role in ['superadmin','admin','director','coordinator']; }
+
+    match /users/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow create: if signedIn() && request.auth.uid == uid;
+      allow update: if signedIn() && request.auth.uid == uid;
+    }
+
+    match /organizations/{orgId} {
+      allow create: if signedIn();
+      allow read: if belongsTo(orgId);
+      allow update: if belongsTo(orgId) && isManager();
+      allow delete: if false;
+
+      match /people/{personId} {
+        allow read: if belongsTo(orgId);
+        allow write: if belongsTo(orgId) && isManager();
+      }
+
+      match /courses/{courseId} {
+        allow read: if belongsTo(orgId);
+        allow write: if belongsTo(orgId) && isManager();
+      }
+
+      match /settings/{documentId} {
+        allow read: if belongsTo(orgId);
+        allow write: if belongsTo(orgId) && isManager();
+      }
+    }
+  }
+}

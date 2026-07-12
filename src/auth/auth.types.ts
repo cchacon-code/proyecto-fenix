@@ -21,5 +21,6 @@ export interface AuthResult {
 export interface AuthGateway {
   signIn(credentials: AuthCredentials): Promise<AuthResult>;
   signOut(): Promise<void>;
-  restoreSession(): Promise<UserIdentity | null>;
+  resetPassword(email: string): Promise<void>;
+  subscribe(callback: (user: UserIdentity | null) => void): () => void;
 }

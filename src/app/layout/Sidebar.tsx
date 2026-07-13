@@ -51,7 +51,7 @@ const groups: NavigationGroup[] = [
   {
     title: 'Académico',
     items: [
-      { to: '/asignaturas', label: 'EduSubjects', icon: BookOpen, enabled: false },
+      { to: '/asignaturas', label: 'EduSubjects', icon: BookOpen, enabled: true, permission: 'subjects.view' },
       { to: '/planificacion', label: 'EduPlanning', icon: BarChart3, enabled: false },
     ],
   },

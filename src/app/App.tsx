@@ -15,6 +15,7 @@ import { OrganizationPage } from './pages/OrganizationPage';
 import { PeoplePage } from './pages/PeoplePage';
 import { SettingsPage } from './pages/SettingsPage';
 import { StoragePage } from './pages/StoragePage';
+import { SubjectsPage } from './pages/SubjectsPage';
 import { CloudStatusPage } from './pages/CloudStatusPage';
 
 export function App() {
@@ -38,6 +39,10 @@ export function App() {
 
                   <Route element={<PermissionRoute permission="courses.view" />}>
                     <Route path="/cursos" element={<CoursesPage />} />
+                  </Route>
+
+                  <Route element={<PermissionRoute permission="subjects.view" />}>
+                    <Route path="/asignaturas" element={<SubjectsPage />} />
                   </Route>
 
                   <Route element={<PermissionRoute permission="organization.view" />}>

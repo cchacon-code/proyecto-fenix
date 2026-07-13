@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 
-import { peopleService } from '../../edupeople';
+import type { Person } from '../../edupeople';
 import type { Course, EducationLevel } from '../index';
 
 interface CourseFormProps {
+  organizationId: string;
+  teachers: Person[];
   courseToEdit: Course | null;
-  onSave: (course: Course) => void;
+  onSave: (course: Course) => Promise<void>;
   onCancel: () => void;
 }
 
@@ -27,26 +29,28 @@ const levels: EducationLevel[] = [
 ];
 
 export function CourseForm({
+  organizationId,
+  teachers,
   courseToEdit,
   onSave,
   onCancel,
 }: CourseFormProps) {
-  const teachers = peopleService
-    .getAll()
-    .filter((person) =>
-      ['teacher', 'coordinator', 'director'].includes(person.type),
-    );
-
-  const [level, setLevel] =
-    useState<EducationLevel>('1° Básico');
-
+  const [level, setLevel] = useState<EducationLevel>('1° Básico');
   const [letter, setLetter] = useState('A');
-  const [academicYear, setAcademicYear] = useState(2026);
+  const [academicYear, setAcademicYear] = useState(
+    new Date().getFullYear(),
+  );
   const [studentCount, setStudentCount] = useState(0);
   const [headTeacherId, setHeadTeacherId] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (!courseToEdit) {
+      setLevel('1° Básico');
+      setLetter('A');
+      setAcademicYear(new Date().getFullYear());
+      setStudentCount(0);
+      setHeadTeacherId('');
       return;
     }
 
@@ -57,21 +61,26 @@ export function CourseForm({
     setHeadTeacherId(courseToEdit.headTeacherId ?? '');
   }, [courseToEdit]);
 
-  function handleSubmit(
+  async function handleSubmit(
     event: React.FormEvent<HTMLFormElement>,
-  ): void {
+  ): Promise<void> {
     event.preventDefault();
+    setIsSaving(true);
 
-    onSave({
-      id: courseToEdit?.id ?? crypto.randomUUID(),
-      organizationId: 'org-educenter',
-      academicYear,
-      level,
-      letter: letter.trim().toUpperCase(),
-      headTeacherId: headTeacherId || undefined,
-      studentCount,
-      active: true,
-    });
+    try {
+      await onSave({
+        id: courseToEdit?.id ?? crypto.randomUUID(),
+        organizationId,
+        academicYear,
+        level,
+        letter: letter.trim().toUpperCase(),
+        headTeacherId: headTeacherId || undefined,
+        studentCount,
+        active: courseToEdit?.active ?? true,
+      });
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   return (
@@ -82,9 +91,7 @@ export function CourseForm({
           <select
             value={level}
             onChange={(event) =>
-              setLevel(
-                event.target.value as EducationLevel,
-              )
+              setLevel(event.target.value as EducationLevel)
             }
           >
             {levels.map((currentLevel) => (
@@ -101,9 +108,7 @@ export function CourseForm({
             required
             maxLength={2}
             value={letter}
-            onChange={(event) =>
-              setLetter(event.target.value)
-            }
+            onChange={(event) => setLetter(event.target.value)}
           />
         </label>
 
@@ -115,9 +120,7 @@ export function CourseForm({
             max={2100}
             value={academicYear}
             onChange={(event) =>
-              setAcademicYear(
-                Number(event.target.value),
-              )
+              setAcademicYear(Number(event.target.value))
             }
           />
         </label>
@@ -129,9 +132,7 @@ export function CourseForm({
             min={0}
             value={studentCount}
             onChange={(event) =>
-              setStudentCount(
-                Number(event.target.value),
-              )
+              setStudentCount(Number(event.target.value))
             }
           />
         </label>
@@ -140,12 +141,9 @@ export function CourseForm({
           Profesor(a) jefe
           <select
             value={headTeacherId}
-            onChange={(event) =>
-              setHeadTeacherId(event.target.value)
-            }
+            onChange={(event) => setHeadTeacherId(event.target.value)}
           >
             <option value="">Sin asignar</option>
-
             {teachers.map((teacher) => (
               <option key={teacher.id} value={teacher.id}>
                 {teacher.firstName} {teacher.lastName}
@@ -156,16 +154,19 @@ export function CourseForm({
       </div>
 
       <div className="form-actions">
-        <button type="submit">
-          {courseToEdit
-            ? 'Guardar cambios'
-            : 'Crear curso'}
+        <button type="submit" disabled={isSaving}>
+          {isSaving
+            ? 'Guardando...'
+            : courseToEdit
+              ? 'Guardar cambios'
+              : 'Crear curso'}
         </button>
 
         <button
           type="button"
           className="secondary-button"
           onClick={onCancel}
+          disabled={isSaving}
         >
           Cancelar
         </button>

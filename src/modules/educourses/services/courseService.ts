@@ -10,6 +10,10 @@ export class CourseService {
     return [...this.courses];
   }
 
+  replaceAll(courses: Course[]): void {
+    this.courses = [...courses];
+  }
+
   add(course: Course): void {
     const alreadyExists = this.courses.some(
       (currentCourse) => currentCourse.id === course.id,

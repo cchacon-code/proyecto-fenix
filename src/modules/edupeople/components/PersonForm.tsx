@@ -5,7 +5,7 @@ import type { Person, PersonType } from '../index';
 interface PersonFormProps {
   organizationId: string;
   personToEdit: Person | null;
-  onSave: (person: Person) => void;
+  onSave: (person: Person) => Promise<void>;
   onCancel: () => void;
 }
 
@@ -23,6 +23,7 @@ export function PersonForm({
   onCancel,
 }: PersonFormProps) {
   const [form, setForm] = useState(emptyForm);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (personToEdit) {
@@ -37,8 +38,11 @@ export function PersonForm({
     }
   }, [personToEdit]);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>): void {
+  async function handleSubmit(
+    event: React.FormEvent<HTMLFormElement>,
+  ): Promise<void> {
     event.preventDefault();
+    setIsSaving(true);
 
     const person: Person = {
       id: personToEdit?.id ?? crypto.randomUUID(),
@@ -50,8 +54,12 @@ export function PersonForm({
       active: true,
     };
 
-    onSave(person);
-    setForm(emptyForm);
+    try {
+      await onSave(person);
+      setForm(emptyForm);
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   return (
@@ -61,6 +69,7 @@ export function PersonForm({
           Nombre
           <input
             required
+            disabled={isSaving}
             value={form.firstName}
             onChange={(event) =>
               setForm({ ...form, firstName: event.target.value })
@@ -72,6 +81,7 @@ export function PersonForm({
           Apellido
           <input
             required
+            disabled={isSaving}
             value={form.lastName}
             onChange={(event) =>
               setForm({ ...form, lastName: event.target.value })
@@ -83,6 +93,7 @@ export function PersonForm({
           Correo
           <input
             type="email"
+            disabled={isSaving}
             value={form.email}
             onChange={(event) =>
               setForm({ ...form, email: event.target.value })
@@ -93,6 +104,7 @@ export function PersonForm({
         <label>
           Tipo
           <select
+            disabled={isSaving}
             value={form.type}
             onChange={(event) =>
               setForm({
@@ -112,11 +124,20 @@ export function PersonForm({
       </div>
 
       <div className="form-actions">
-        <button type="submit">
-          {personToEdit ? 'Guardar cambios' : 'Agregar persona'}
+        <button type="submit" disabled={isSaving}>
+          {isSaving
+            ? 'Guardando...'
+            : personToEdit
+              ? 'Guardar cambios'
+              : 'Agregar persona'}
         </button>
 
-        <button type="button" className="secondary-button" onClick={onCancel}>
+        <button
+          type="button"
+          className="secondary-button"
+          disabled={isSaving}
+          onClick={onCancel}
+        >
           Cancelar
         </button>
       </div>

@@ -18,6 +18,10 @@ export class PeopleService {
     return this.people.find((person) => person.id === personId) ?? null;
   }
 
+  replaceAll(people: Person[]): void {
+    this.people = [...people];
+  }
+
   add(person: Person): void {
     if (this.people.some((item) => item.id === person.id)) {
       throw new Error(`La persona ${person.id} ya existe.`);

@@ -118,3 +118,19 @@
     grid-template-columns: 1fr;
   }
 }
+
+.cloud-sync-label {
+  display: block;
+  margin-top: 0.35rem;
+  color: #16a34a;
+  font-weight: 700;
+}
+
+.cloud-error-message {
+  margin: 1rem 0;
+  padding: 0.9rem 1rem;
+  border: 1px solid #fca5a5;
+  border-radius: 12px;
+  background: #fef2f2;
+  color: #991b1b;
+}
